@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat with Sanjana's Avatar</title>
+  <style>
+    /* ── Design tokens ─────────────────────────────────────────────────── */
+    :root {
+      --bg:           #0d1117;
+      --surface:      #161b22;
+      --surface-2:    #21262d;
+      --border:       #30363d;
+      --accent:       #7c6af0;
+      --accent-glow:  rgba(124,106,240,.15);
+      --accent-dim:   rgba(124,106,240,.32);
+      --green:        #3fb950;
+      --red:          #f85149;
+      --amber:        #e3b341;
+      --text:         #e6edf3;
+      --text-2:       #8b949e;
+      --bubble-user:  #7c6af0;
+      --bubble-bot:   #21262d;
+      --r:            14px;
+      --r-sm:         8px;
+      --font:         'Inter','Segoe UI',system-ui,sans-serif;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--font);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    /* ── Shell ──────────────────────────────────────────────────────────── */
+    .shell {
+      width: 100%;
+      max-width: 740px;
+      display: flex;
+      flex-direction: column;
+      height: min(720px, 100dvh - 32px);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 0 0 1px var(--accent-dim), 0 28px 56px rgba(0,0,0,.6);
+    }
+
+    /* ── Header ─────────────────────────────────────────────────────────── */
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border);
+      flex-shrink: 0;
+      background: var(--surface);
+    }
+    .avatar-ring {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg,#7c6af0,#a78bfa);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 18px; flex-shrink: 0;
+      box-shadow: 0 0 0 2px var(--bg), 0 0 0 3px var(--accent-dim);
+    }
+    .header-info { flex: 1; min-width: 0; }
+    .header-info h1 { font-size: 15px; font-weight: 600; letter-spacing: -.01em; }
+    .header-info p  { font-size: 12px; color: var(--text-2); margin-top: 2px; }
+    .header-actions { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .status-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 6px var(--green);
+    }
+    .end-chat-btn {
+      display: inline-flex; align-items: center; gap: 5px;
+      padding: 5px 11px; border-radius: 20px;
+      font-size: 11px; font-family: var(--font); font-weight: 500;
+      cursor: pointer; border: 1px solid rgba(248,81,73,.35);
+      background: rgba(248,81,73,.08); color: var(--red);
+      transition: background .15s, border-color .15s;
+    }
+    .end-chat-btn:hover:not(:disabled) { background: rgba(248,81,73,.18); border-color: var(--red); }
+    .end-chat-btn:disabled { opacity: .4; cursor: not-allowed; }
+    .end-chat-btn svg { width: 11px; height: 11px; flex-shrink: 0; }
+    .session-ended-notice {
+      text-align: center; font-size: 12px; color: var(--text-2);
+      padding: 8px 0 2px; letter-spacing: .01em;
+    }
+
+    /* ── Messages ───────────────────────────────────────────────────────── */
+    .messages {
+      flex: 1; overflow-y: auto;
+      padding: 20px 20px 8px;
+      display: flex; flex-direction: column; gap: 14px;
+      scroll-behavior: smooth;
+    }
+    .messages::-webkit-scrollbar { width: 4px; }
+    .messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+    .msg { display: flex; flex-direction: column; max-width: 84%; gap: 4px; }
+    .msg.user  { align-self: flex-end;   align-items: flex-end; }
+    .msg.bot   { align-self: flex-start; align-items: flex-start; }
+
+    .bubble {
+      padding: 11px 15px;
+      border-radius: var(--r);
+      font-size: 14px; line-height: 1.65;
+      word-break: break-word; white-space: pre-wrap;
+    }
+    .msg.user .bubble {
+      background: var(--bubble-user); color: #fff;
+      border-bottom-right-radius: 4px;
+    }
+    .msg.bot .bubble {
+      background: var(--bubble-bot); color: var(--text);
+      border: 1px solid var(--border);
+      border-bottom-left-radius: 4px;
+    }
+    .msg-time { font-size: 10px; color: var(--text-2); padding: 0 4px; }
+
+    /* Escalation card — shown when avatar can't answer */
+    .escalation-card {
+      background: rgba(124,106,240,.08);
+      border: 1px solid var(--accent-dim);
+      border-radius: var(--r);
+      padding: 14px 16px;
+      display: flex; flex-direction: column; gap: 10px;
+      max-width: 360px;
+    }
+    .escalation-card p {
+      font-size: 13px; color: var(--text-2); line-height: 1.5;
+    }
+    .escalation-card strong { color: var(--text); }
+    .esc-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    .esc-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 7px 13px; border-radius: 20px;
+      font-size: 12px; font-family: var(--font);
+      font-weight: 500; cursor: pointer;
+      border: 1px solid var(--border);
+      background: var(--surface-2); color: var(--text);
+      text-decoration: none; transition: border-color .15s, background .15s;
+    }
+    .esc-btn:hover { border-color: var(--accent); background: var(--accent-glow); }
+    .esc-btn.primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .esc-btn.primary:hover { opacity: .88; }
+    .esc-btn svg { width: 13px; height: 13px; flex-shrink: 0; }
+
+    /* Unanswered questions summary banner */
+    .unanswered-banner {
+      background: rgba(227,179,65,.08);
+      border: 1px solid rgba(227,179,65,.3);
+      border-radius: var(--r-sm);
+      padding: 10px 14px;
+      font-size: 12px; color: var(--amber);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .unanswered-banner span { color: var(--text-2); }
+
+    /* Typing indicator */
+    .typing-indicator {
+      display: flex; gap: 5px; padding: 14px 16px;
+      background: var(--bubble-bot); border: 1px solid var(--border);
+      border-radius: var(--r); border-bottom-left-radius: 4px; width: fit-content;
+    }
+    .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--text-2);
+      animation: bounce 1.2s ease-in-out infinite;
+    }
+    .dot:nth-child(2) { animation-delay: .2s; }
+    .dot:nth-child(3) { animation-delay: .4s; }
+    @keyframes bounce {
+      0%,60%,100% { transform: translateY(0);   opacity: .5; }
+      30%          { transform: translateY(-5px); opacity: 1; }
+    }
+
+    /* Starters */
+    .starters { display: flex; flex-wrap: wrap; gap: 8px; padding: 4px 0 4px; }
+    .starter-btn {
+      background: transparent; border: 1px solid var(--border);
+      color: var(--text-2); font-size: 12px; font-family: var(--font);
+      padding: 6px 13px; border-radius: 20px;
+      cursor: pointer; transition: border-color .15s, color .15s, background .15s;
+      white-space: nowrap;
+    }
+    .starter-btn:hover { border-color: var(--accent); color: var(--text); background: var(--accent-glow); }
+
+    /* ── Email modal ─────────────────────────────────────────────────────── */
+    .modal-backdrop {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.65); backdrop-filter: blur(4px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 16px; z-index: 100;
+      opacity: 0; pointer-events: none; transition: opacity .2s;
+    }
+    .modal-backdrop.open { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 16px; padding: 24px; width: 100%; max-width: 440px;
+      box-shadow: 0 24px 48px rgba(0,0,0,.5);
+      transform: translateY(8px); transition: transform .2s;
+    }
+    .modal-backdrop.open .modal { transform: translateY(0); }
+    .modal h2 { font-size: 16px; font-weight: 600; margin-bottom: 6px; }
+    .modal p  { font-size: 13px; color: var(--text-2); line-height: 1.5; margin-bottom: 18px; }
+    .modal label {
+      display: block; font-size: 12px; color: var(--text-2);
+      margin-bottom: 4px; margin-top: 12px;
+    }
+    .modal input {
+      width: 100%; background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 9px 12px; color: var(--text);
+      font-family: var(--font); font-size: 14px; outline: none;
+      transition: border-color .15s;
+    }
+    .modal input:focus { border-color: var(--accent); }
+    .modal input::placeholder { color: var(--text-2); }
+    .unanswered-list {
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: var(--r-sm); padding: 10px 12px; margin-top: 12px;
+      font-size: 12px; color: var(--text-2); line-height: 1.8;
+      max-height: 120px; overflow-y: auto;
+    }
+    .modal-actions { display: flex; gap: 10px; margin-top: 20px; justify-content: flex-end; }
+    .btn-ghost {
+      padding: 8px 16px; border-radius: var(--r-sm);
+      border: 1px solid var(--border); background: transparent;
+      color: var(--text-2); font-family: var(--font); font-size: 13px;
+      cursor: pointer; transition: border-color .15s;
+    }
+    .btn-ghost:hover { border-color: var(--text-2); }
+    .btn-primary {
+      padding: 8px 18px; border-radius: var(--r-sm);
+      border: none; background: var(--accent); color: #fff;
+      font-family: var(--font); font-size: 13px; font-weight: 500;
+      cursor: pointer; transition: opacity .15s;
+    }
+    .btn-primary:hover { opacity: .88; }
+
+    /* ── Input area ──────────────────────────────────────────────────────── */
+    .input-area {
+      padding: 12px 16px 14px;
+      border-top: 1px solid var(--border);
+      background: var(--surface); flex-shrink: 0;
+    }
+    .input-row {
+      display: flex; gap: 10px; align-items: flex-end;
+      background: var(--surface-2); border: 1px solid var(--border);
+      border-radius: var(--r); padding: 10px 14px;
+      transition: border-color .15s, box-shadow .15s;
+    }
+    .input-row:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-glow); }
+    textarea {
+      flex: 1; background: transparent; border: none; outline: none;
+      resize: none; font-family: var(--font); font-size: 14px;
+      color: var(--text); line-height: 1.5; max-height: 120px; overflow-y: auto;
+    }
+    textarea::placeholder { color: var(--text-2); }
+    .send-btn {
+      width: 32px; height: 32px; border-radius: var(--r-sm);
+      border: none; background: var(--accent); color: #fff;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: opacity .15s, transform .1s;
+    }
+    .send-btn:hover:not(:disabled) { opacity: .85; transform: scale(1.05); }
+    .send-btn:disabled { opacity: .35; cursor: not-allowed; }
+    .send-btn svg { width: 14px; height: 14px; }
+    .input-hint { font-size: 11px; color: var(--text-2); margin-top: 8px; text-align: center; }
+
+    /* ── Error state ─────────────────────────────────────────────────────── */
+    .msg.error .bubble { background: rgba(248,81,73,.1); border-color: rgba(248,81,73,.3); color: var(--red); }
+
+    /* ── Responsive ──────────────────────────────────────────────────────── */
+    @media (max-width: 480px) {
+      body { padding: 0; }
+      .shell { height: 100dvh; border-radius: 0; border: none; box-shadow: none; }
+      .msg  { max-width: 94%; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── Email modal ────────────────────────────────────────────────────────── -->
+<div class="modal-backdrop" id="emailModal" role="dialog" aria-modal="true">
+  <div class="modal">
+    <h2>Send unanswered questions</h2>
+    <p>
+      Your email client will open with a pre-filled message.
+      Sanjana will get back to you directly.
+    </p>
+
+    <label>Your name</label>
+    <input type="text" id="recruiterName" placeholder="Jane Smith" />
+
+    <label>Your email (optional — added as CC)</label>
+    <input type="email" id="recruiterEmail" placeholder="jane@company.com" />
+
+    <label>Company (optional)</label>
+    <input type="text" id="recruiterCompany" placeholder="Acme Corp" />
+
+    <label>Questions that couldn't be answered</label>
+    <div class="unanswered-list" id="modalQuestionList"></div>
+
+    <div class="modal-actions">
+      <button class="btn-ghost" onclick="closeModal()">Cancel</button>
+      <button class="btn-primary" onclick="openMailto()">Open email client →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ── Main shell ─────────────────────────────────────────────────────────── -->
+<div class="shell">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="avatar-ring">👩‍💻</div>
+    <div class="header-info">
+      <h1 id="headerName">Sanjana's AI Avatar</h1>
+      <p>Ask me anything about her background, projects & interests</p>
+    </div>
+    <div class="header-actions">
+      <button class="end-chat-btn" id="endChatBtn" onclick="endChat()" title="End session and email unanswered questions">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 6L6 18M6 6l12 12"/>
+        </svg>
+        End Chat
+      </button>
+      <div class="status-dot" id="statusDot" title="Online"></div>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div class="messages" id="messages">
+    <div class="msg bot">
+      <div class="bubble" id="welcomeMsg">
+        Hi! I'm Sanjana's AI assistant. I can tell you about her experience,
+        projects, technical skills, and interests. What would you like to know? 👋
+      </div>
+    </div>
+    <div class="msg bot">
+      <div class="starters" id="starters">
+        <button class="starter-btn" onclick="sendStarter(this)">What's her tech stack?</button>
+        <button class="starter-btn" onclick="sendStarter(this)">Walk me through a recent project</button>
+        <button class="starter-btn" onclick="sendStarter(this)">What roles is she open to?</button>
+        <button class="starter-btn" onclick="sendStarter(this)">What makes her stand out?</button>
+        <button class="starter-btn" onclick="sendStarter(this)">Tell me about her interests</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input -->
+  <div class="input-area">
+    <div class="input-row">
+      <textarea
+        id="questionInput"
+        placeholder="Ask anything about Sanjana…"
+        rows="1"
+        onkeydown="handleKey(event)"
+        oninput="autoResize(this)"
+      ></textarea>
+      <button class="send-btn" id="sendBtn" onclick="sendMessage()" title="Send">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+             stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+    </div>
+    <p class="input-hint">Enter to send · Shift+Enter for new line</p>
+  </div>
+
+</div>
+
+<script>
+  // ── Config ────────────────────────────────────────────────────────────────
+  const API_BASE = window.location.origin;
+
+  // ── State ─────────────────────────────────────────────────────────────────
+  let isLoading        = false;
+  let unansweredList   = [];   // questions the avatar couldn't answer this session
+  let ownerConfig      = {};   // populated from /config on load
+
+  // ── Helpers ───────────────────────────────────────────────────────────────
+  const $ = id => document.getElementById(id);
+  const now = () => new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+  function autoResize(el) {
+    el.style.height = 'auto';
+    el.style.height = Math.min(el.scrollHeight, 120) + 'px';
+  }
+
+  function scrollToBottom() {
+    const msgs = $('messages');
+    msgs.scrollTop = msgs.scrollHeight;
+  }
+
+  function setLoading(state) {
+    isLoading = state;
+    $('sendBtn').disabled = state;
+    $('questionInput').disabled = state;
+  }
+
+  // ── Message rendering ─────────────────────────────────────────────────────
+  function appendMessage(role, text, isError = false) {
+    const msgs = $('messages');
+    const wrap = document.createElement('div');
+    wrap.className = `msg ${role}${isError ? ' error' : ''}`;
+
+    const bubble = document.createElement('div');
+    bubble.className = 'bubble';
+    bubble.innerText = text;
+
+    const time = document.createElement('span');
+    time.className = 'msg-time';
+    time.textContent = now();
+
+    wrap.appendChild(bubble);
+    wrap.appendChild(time);
+    msgs.appendChild(wrap);
+    scrollToBottom();
+    return wrap;
+  }
+
+  function appendEscalationCard(question) {
+    const msgs = $('messages');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg bot';
+
+    const name = ownerConfig.owner_name || 'Sanjana';
+    const hasWhatsApp = ownerConfig.has_whatsapp && ownerConfig.whatsapp_number;
+    const waLink = hasWhatsApp
+      ? `https://wa.me/${ownerConfig.whatsapp_number}?text=${encodeURIComponent('Hi ' + name + ', I have a question about your background.')}`
+      : null;
+
+    wrap.innerHTML = `
+      <div class="escalation-card">
+        <p>
+          <strong>I couldn't find that in my documents.</strong><br>
+          You can reach ${name} directly for this one.
+        </p>
+        <div class="esc-actions">
+          <button class="esc-btn primary" onclick="openEmailModal()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                 stroke-linecap="round" stroke-linejoin="round">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            Email ${name}
+          </button>
+          ${waLink ? `
+          <a class="esc-btn" href="${waLink}" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/>
+              <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.555 4.112 1.528 5.835L.057 23.857l6.218-1.459A11.934 11.934 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.8 9.8 0 01-5.012-1.373l-.36-.214-3.712.871.936-3.617-.235-.372A9.818 9.818 0 012.182 12C2.182 6.593 6.593 2.182 12 2.182S21.818 6.593 21.818 12 17.407 21.818 12 21.818z"/>
+            </svg>
+            WhatsApp
+          </a>` : ''}
+        </div>
+      </div>
+      <span class="msg-time">${now()}</span>
+    `;
+    msgs.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  function showUnansweredBanner() {
+    // Update or create the unanswered-questions banner above the input
+    let banner = document.querySelector('.unanswered-banner');
+    if (!banner) {
+      banner = document.createElement('div');
+      banner.className = 'unanswered-banner';
+      $('messages').appendChild(banner);
+    }
+    const count = unansweredList.length;
+    banner.innerHTML = `
+      <span>⚠️</span>
+      <span>${count} question${count > 1 ? 's' : ''} couldn't be answered from documents.
+      <button style="background:none;border:none;color:var(--amber);cursor:pointer;font-size:12px;text-decoration:underline;padding:0;font-family:var(--font);"
+        onclick="openEmailModal()">Send them all to Sanjana →</button></span>
+    `;
+    scrollToBottom();
+  }
+
+  function showTyping() {
+    const msgs = $('messages');
+    const wrap = document.createElement('div');
+    wrap.className = 'msg bot'; wrap.id = 'typing';
+    wrap.innerHTML = `<div class="typing-indicator">
+      <div class="dot"></div><div class="dot"></div><div class="dot"></div>
+    </div>`;
+    msgs.appendChild(wrap);
+    scrollToBottom();
+  }
+
+  function removeTyping() {
+    const el = $('typing');
+    if (el) el.remove();
+  }
+
+  // ── Core send ──────────────────────────────────────────────────────────────
+  async function sendMessage() {
+    const input = $('questionInput');
+    const question = input.value.trim();
+    if (!question || isLoading) return;
+
+    input.value = ''; input.style.height = 'auto';
+    appendMessage('user', question);
+    setLoading(true); showTyping();
+
+    try {
+      const res = await fetch(`${API_BASE}/chat`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ question }),
+      });
+      removeTyping();
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        appendMessage('bot', `Something went wrong: ${err.detail || res.statusText}`, true);
+        return;
+      }
+
+      const data = await res.json();
+
+      if (!data.answered) {
+        // Avatar couldn't answer — track it and show escalation UI
+        unansweredList.push(question);
+        appendMessage('bot', data.answer);
+        appendEscalationCard(question);
+        showUnansweredBanner();
+      } else {
+        appendMessage('bot', data.answer);
+      }
+
+    } catch (err) {
+      removeTyping();
+      appendMessage('bot',
+        'Could not reach the server. Make sure the FastAPI backend is running at ' + API_BASE,
+        true
+      );
+      console.error('[Avatar]', err);
+    } finally {
+      setLoading(false);
+      input.focus();
+    }
+  }
+
+  function sendStarter(btn) {
+    $('questionInput').value = btn.textContent;
+    btn.closest('#starters')?.closest('.msg')?.remove();
+    sendMessage();
+  }
+
+  function handleKey(e) {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); }
+  }
+
+  // ── Email modal ────────────────────────────────────────────────────────────
+  function openEmailModal() {
+    // Populate the question list preview
+    const listEl = $('modalQuestionList');
+    if (unansweredList.length === 0) {
+      listEl.textContent = 'No unanswered questions yet.';
+    } else {
+      listEl.innerHTML = unansweredList.map(q => `• ${q}`).join('<br>');
+    }
+    $('emailModal').classList.add('open');
+    $('recruiterName').focus();
+  }
+
+  function closeModal() { $('emailModal').classList.remove('open'); }
+
+  // Close modal on backdrop click
+  $('emailModal').addEventListener('click', e => {
+    if (e.target === $('emailModal')) closeModal();
+  });
+
+  async function openMailto() {
+    const name    = $('recruiterName').value.trim();
+    const email   = $('recruiterEmail').value.trim();
+    const company = $('recruiterCompany').value.trim();
+
+    try {
+      const res = await fetch(`${API_BASE}/mailto-body`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          recruiter_name:    name,
+          recruiter_email:   email,
+          recruiter_company: company,
+          questions:         unansweredList,
+        }),
+      });
+
+      if (!res.ok) throw new Error('Server error');
+      const { mailto_url } = await res.json();
+
+      // Open the user's default email client with everything pre-filled
+      window.location.href = mailto_url;
+      closeModal();
+
+    } catch (err) {
+      console.error('[Avatar] mailto generation failed', err);
+      // Fallback — build a basic mailto directly in the browser
+      const body = `Hi Sanjana,\n\nI have a few questions:\n\n${unansweredList.map(q => '• ' + q).join('\n')}\n\nBest,\n${name}`;
+      const owner_email = ownerConfig.owner_email || 'your@email.com';
+      window.location.href = `mailto:${owner_email}?subject=Questions via AI Avatar&body=${encodeURIComponent(body)}`;
+      closeModal();
+    }
+  }
+
+  // ── End Chat ──────────────────────────────────────────────────────────────
+  async function endChat() {
+    const btn = $('endChatBtn');
+    btn.disabled = true;
+    $('questionInput').disabled = true;
+    $('sendBtn').disabled = true;
+
+    if (unansweredList.length > 0) {
+      // Auto-forward all unanswered questions to Sanjana (no recruiter details needed)
+      try {
+        const res = await fetch(`${API_BASE}/mailto-body`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            recruiter_name: 'Chat session visitor',
+            recruiter_email: '',
+            recruiter_company: '',
+            questions: unansweredList,
+          }),
+        });
+        if (!res.ok) throw new Error();
+        const { mailto_url } = await res.json();
+        window.location.href = mailto_url;
+      } catch {
+        // Fallback: build mailto directly
+        const owner_email = ownerConfig.owner_email || 'your@email.com';
+        const qList = unansweredList.map(q => '  • ' + q).join('\n');
+        const body = `Hi Sanjana,\n\nThese questions came up during a chat session and couldn't be answered from your documents:\n\n${qList}\n\nYou may want to add this information to improve your AI avatar.`;
+        window.location.href = `mailto:${owner_email}?subject=${encodeURIComponent('Unanswered questions — AI Avatar session')}&body=${encodeURIComponent(body)}`;
+      }
+      appendMessage('bot',
+        `Session ended. ${unansweredList.length} unanswered question${unansweredList.length > 1 ? 's have' : ' has'} been forwarded to Sanjana so she can improve the avatar. Thanks for chatting! 👋`
+      );
+    } else {
+      appendMessage('bot', 'Session ended. All your questions were answered — thanks for chatting! 👋');
+    }
+
+    // Show locked input state
+    const hint = document.querySelector('.input-hint');
+    hint.innerHTML = '<span class="session-ended-notice">Session ended — refresh to start a new chat</span>';
+    $('questionInput').placeholder = 'Session ended';
+  }
+
+  // ── Init ──────────────────────────────────────────────────────────────────
+  (async () => {
+    // Load owner config to personalise the UI
+    try {
+      const res = await fetch(`${API_BASE}/config`);
+      if (res.ok) {
+        ownerConfig = await res.json();
+        const name = ownerConfig.owner_name;
+        if (name) {
+          $('headerName').textContent = `${name}'s AI Avatar`;
+          $('welcomeMsg').textContent =
+            `Hi! I'm ${name}'s AI assistant. I can tell you about her experience, projects, technical skills, and interests. What would you like to know? 👋`;
+          document.title = `Chat with ${name}'s Avatar`;
+          document.querySelectorAll('.input-area textarea')
+            .forEach(el => el.placeholder = `Ask anything about ${name}…`);
+        }
+      }
+    } catch {}
+
+    // Health check
+    try {
+      const res = await fetch(`${API_BASE}/health`);
+      if (!res.ok) throw new Error();
+    } catch {
+      const dot = $('statusDot');
+      dot.style.background = 'var(--red)';
+      dot.style.boxShadow  = '0 0 6px var(--red)';
+      dot.title = 'Server offline';
+    }
+  })();
+</script>
+
+</body>
+</html>
