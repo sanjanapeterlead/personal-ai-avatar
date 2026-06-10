@@ -25,10 +25,9 @@ It answers questions from her documents and escalates unanswerable questions via
 2. **Do not touch `.index_cache/`** unless the user asks to rebuild the index.
    To rebuild: delete the folder and restart. Rebuilding re-embeds all documents.
 
-3. **Use LlamaIndex's query engine for LLM calls.** Set `Settings.llm = Ollama(...)`
-   and use `index.as_query_engine(llm=llm)`. Do NOT call Ollama manually via HTTP —
-   LlamaIndex's query engine has proven internal prompts that reliably return
-   `"Empty Response"` on missing context, preventing hallucination.
+3. **`Settings.llm = None` must stay set.** LLM calls go through `llm.py`
+   (`call_llm` → `call_ollama` or `call_gemini`). Do not let LlamaIndex make
+   its own LLM calls — LlamaIndex is used for embeddings and retrieval only.
 
 4. **`index.html` is intentionally one file.** Keep it self-contained so it
    works as a GitHub Pages drop-in and as an `<iframe>` embed. Do not split
@@ -49,7 +48,15 @@ It answers questions from her documents and escalates unanswerable questions via
 
 | File | Purpose |
 |---|---|
-| `app.py` | FastAPI backend — RAG pipeline + mailto endpoint |
+| `app.py` | FastAPI entry point — lifespan, middleware, router registration |
+| `config.py` | All env vars, path constants, startup validation |
+| `schemas.py` | Pydantic request/response models |
+| `indexer.py` | Document loading and vector index construction |
+| `prompts.py` | `SYSTEM_PROMPT` and `build_prompt()` |
+| `llm.py` | `call_ollama`, `call_gemini`, `call_llm` |
+| `routers/health.py` | `GET /health` |
+| `routers/chat.py` | `POST /chat` |
+| `routers/misc.py` | `GET /config`, `POST /mailto-body`, `GET /` |
 | `index.html` | Chat widget with escalation UX |
 | `requirements.txt` | Python dependencies |
 | `data/` | All source documents (sub-folders by type) |
@@ -94,13 +101,13 @@ uvicorn app:app --reload --port 8000
 
 ## Unanswered question detection
 
-LlamaIndex's query engine returns the string `"Empty Response"` when no
-relevant context is found. `app.py` checks `answer == UNANSWERED_SIGNAL`
-and sets `answered=False`. The frontend reads this flag to show the
-escalation card.
+`UNANSWERED_SIGNAL` is defined in `config.py` and must match the phrase in
+`SYSTEM_PROMPT` (in `prompts.py`) exactly. `routers/chat.py` checks
+`answer.startswith(UNANSWERED_SIGNAL)` and sets `answered=False`.
+The frontend reads this flag to show the escalation card.
 
-**Do not change `UNANSWERED_SIGNAL`** without also updating the check in
-the `/chat` endpoint.
+**Do not change `UNANSWERED_SIGNAL`** without updating both `config.py`
+and the phrase in `prompts.py`.
 
 ---
 

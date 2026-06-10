@@ -6,10 +6,11 @@ pydantic
 # HTTP client (used to call Ollama)
 httpx
 
-# LlamaIndex - core + HuggingFace embeddings + Ollama LLM
+# LlamaIndex - core + HuggingFace embeddings only
+# NOTE: llama-index-llms-ollama intentionally excluded —
+# Ollama and Gemini are both called directly via httpx for provider flexibility.
 llama-index-core
 llama-index-embeddings-huggingface
-llama-index-llms-ollama
 
 # HuggingFace sentence-transformers (local embeddings - no API key needed)
 sentence-transformers

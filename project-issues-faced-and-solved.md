@@ -2,6 +2,48 @@
 
 ---
 
+## Issue 6: LLM_PROVIDER Crashes if Not Set in .env (AttributeError)
+
+**Error:**
+```
+AttributeError: 'NoneType' object has no attribute 'lower'
+```
+
+**Cause:** `os.environ.get("LLM_PROVIDER").lower()` — `.get()` returns `None` when
+the variable is absent, and calling `.lower()` on `None` throws `AttributeError`.
+
+**Fix:** Added a default value:
+```python
+LLM_PROVIDER = os.environ.get("LLM_PROVIDER", "ollama").lower()
+```
+
+---
+
+## Issue 7: Monolithic app.py — All Config, Logic, and Routes in One File
+
+**Symptom:** `app.py` was 330+ lines mixing environment reads, RAG indexing,
+LLM HTTP calls, prompt building, and all five endpoints in a single file.
+Env vars were not properly isolated — hard to debug, test, or extend.
+
+**Fix:** Split into focused modules:
+
+| Module | Responsibility |
+|---|---|
+| `config.py` | All `os.environ.get()` calls, path constants, startup validation |
+| `schemas.py` | Pydantic request/response models |
+| `indexer.py` | Document loading, chunking, embedding, index persistence |
+| `prompts.py` | `SYSTEM_PROMPT` constant and `build_prompt()` |
+| `llm.py` | `call_ollama`, `call_gemini`, `call_llm` (provider abstraction) |
+| `routers/health.py` | `GET /health` |
+| `routers/chat.py` | `POST /chat` |
+| `routers/misc.py` | `GET /config`, `POST /mailto-body`, `GET /` |
+| `app.py` | FastAPI instance, lifespan, middleware, router registration only |
+
+**Why:** Each file now has one reason to change. Config is the only place that
+touches environment variables — all other modules import from `config.py`.
+
+---
+
 ## Issue 1: Port 8000 Access Denied on Windows
 
 **Error:**
