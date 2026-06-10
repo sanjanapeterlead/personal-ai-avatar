@@ -1,16 +1,17 @@
+# Vector index — auto-rebuilt, no need to commit
+.index_cache/
+
+# Python
+venv/
 __pycache__/
 *.pyc
-
+*.pyo
 .env
-.vnev/
-venv/
 
-.idea/
-.vscode/
-
+# OS
 .DS_Store
+Thumbs.db
 
-storage/
-cache/
-
-*.log
+# Temp server log files
+server_stdout.txt
+server_stderr.txt

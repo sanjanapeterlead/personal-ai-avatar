@@ -1,0 +1,350 @@
+{
+  "metadata": {
+    "name": "Sanjana Peter",
+    "version": "1.0",
+    "last_updated": "2026-06-09",
+    "purpose": "RAG knowledge base for personal chatbot — covers career, technical skills, projects, and background",
+    "sources": ["resume", "linkedin", "github"]
+  },
+
+  "identity": {
+    "full_name": "Sanjana Peter",
+    "pronouns": "she/her",
+    "title": "Senior Full Stack Engineer | Technical Lead | AI-Powered SaaS",
+    "location": "Poughkeepsie, NY (NYC Metro Area)",
+    "open_to_work": true,
+    "work_preferences": ["Remote", "Hybrid", "On-site"],
+    "target_roles": [
+      "Senior Software Engineer",
+      "Senior Full Stack Engineer",
+      "Technical Lead",
+      "Staff Engineer"
+    ],
+    "target_industries": [
+      "Enterprise SaaS",
+      "AI-powered products",
+      "Learning Technology",
+      "Talent Management"
+    ],
+    "contact": {
+      "email": "sanjanapeter.career@gmail.com",
+      "linkedin": "https://linkedin.com/in/sanjana-peter",
+      "github": "https://github.com/SanjanaPeter71",
+      "portfolio": "https://SanjanaPeter71.github.io"
+    }
+  },
+
+  "summary": {
+    "headline": "Senior Full Stack Engineer with 8+ years building enterprise SaaS platforms, recommendation systems, and scalable backend services.",
+    "narrative": "I build the backend systems that make AI-powered products work reliably in production. With 8+ years across enterprise SaaS, recommendation systems, and scalable backend services, I've worked across the full product lifecycle — from architecture and system design through implementation, deployment, and production support. I've led cross-functional teams of 12 engineers, collaborated directly with enterprise clients, and delivered business-critical platforms under aggressive timelines.",
+    "differentiators": [
+      "Deep expertise in NestJS, TypeScript, PostgreSQL, and AWS applied to enterprise-scale products",
+      "Hands-on AI/ML experience: built production AI integrations and conducted graduate ML research (95% accuracy, BLE intrusion detection)",
+      "Certified in AI Agents (Google 5-Day Intensive), MCP, and Open-Source Inference",
+      "Proven technical leadership: led 10–12 person cross-functional engineering teams",
+      "Currently active in agentic/LLM workflows and building with MCP"
+    ]
+  },
+
+  "technical_skills": {
+    "primary_languages": ["TypeScript", "JavaScript", "Node.js", "Python", "PHP"],
+    "frontend": ["React.js", "Next.js", "Redux", "Zustand", "TanStack Query", "React Hook Form", "Material UI", "HTML5", "CSS3"],
+    "backend": ["NestJS", "Express.js", "REST API Development", "TypeORM", "Microservices"],
+    "databases": ["PostgreSQL", "MySQL", "MongoDB", "Redis", "DynamoDB", "Elasticsearch"],
+    "ai_and_ml": [
+      "Machine Learning",
+      "RandomForest",
+      "Scikit-learn",
+      "AI Agents",
+      "LLM Workflows",
+      "MCP (Model Context Protocol)",
+      "Recommendation Systems",
+      "AI API Integrations"
+    ],
+    "cloud_and_devops": ["AWS (Lambda, API Gateway, S3)", "Azure", "Docker", "GitHub Actions", "CI/CD Pipelines"],
+    "security": ["OAuth 2.0", "JWT", "RBAC", "Azure AD", "SAML 2.0", "SSO", "HIPAA Compliance"],
+    "testing": ["Jest", "JMeter", "Unit Testing", "Integration Testing", "Code Reviews"],
+    "tools": ["Cursor AI", "Git", "TypeORM", "Sails.js"]
+  },
+
+  "work_experience": [
+    {
+      "id": "exp_01",
+      "role": "Full Stack Software Engineer",
+      "company": "iSpace, Inc.",
+      "client": "Korn Ferry",
+      "type": "Full-time",
+      "location": "El Segundo, CA (Remote)",
+      "start_date": "2025-06",
+      "end_date": "present",
+      "duration": "1 year 1 month",
+      "summary": "Built the Learning Lab within Korn Ferry's new Talent Suite — a global enterprise learning platform serving Fortune 500 organizations.",
+      "key_contributions": [
+        "Spearheaded development of the Learning Lab within Korn Ferry Talent Suite from design through production release.",
+        "Architected a configurable recommendation engine using json-rules-engine, reducing onboarding effort for client-specific recommendation models by approximately 30%.",
+        "Integrated AI-powered role-play vendor Yoodli and learning platform Thought Industries via secure API design, data synchronization, and end-to-end workflow orchestration.",
+        "Designed PostgreSQL database schemas, entity relationships, and indexing strategies supporting scalable learning workflows; improved platform responsiveness by ~20%.",
+        "Developed 15+ RESTful APIs using Node.js, NestJS, TypeORM, and PostgreSQL for learner progress tracking, recommendation workflows, content management, and enterprise integrations.",
+        "Built enterprise React.js applications using TypeScript, Material UI, Zustand, and TanStack Query; developed reusable component libraries.",
+        "Leveraged Cursor AI and AI-assisted workflows to accelerate feature delivery; contributed to CI/CD pipeline improvements using GitHub Actions."
+      ],
+      "technologies": ["Node.js", "TypeScript", "NestJS", "React.js", "PostgreSQL", "TypeORM", "AWS", "REST APIs", "GitHub Actions", "Cursor AI", "json-rules-engine"]
+    },
+    {
+      "id": "exp_02",
+      "role": "Student Technician — Network Department",
+      "company": "Marist University",
+      "type": "Part-time",
+      "location": "Poughkeepsie, NY",
+      "start_date": "2023-10",
+      "end_date": "2025-05",
+      "duration": "1 year 8 months",
+      "summary": "Part-time IT support role held concurrently with Master's degree studies.",
+      "key_contributions": [
+        "Provided technical support for campus network infrastructure, troubleshooting device connectivity and network issues.",
+        "Collaborated with IT team on system maintenance, hardware deployments, and technology upgrades."
+      ],
+      "technologies": []
+    },
+    {
+      "id": "exp_03",
+      "role": "Senior Full Stack Engineer | Technical Lead",
+      "company": "Eliptico IT Solutions Private Limited",
+      "type": "Full-time",
+      "location": "Hyderabad, India",
+      "start_date": "2020-10",
+      "end_date": "2023-07",
+      "duration": "2 years 10 months",
+      "summary": "Led a cross-functional engineering team delivering enterprise healthcare and talent management platforms. Assumed full delivery ownership after a leadership transition.",
+      "key_contributions": [
+        "Led a cross-functional team of 10–12 engineers across frontend, backend, QA, and product for enterprise platforms.",
+        "Assumed ownership of platform delivery following a leadership transition — worked directly with enterprise clients under aggressive timelines.",
+        "Improved PostgreSQL query performance by up to 50% through indexing, execution plan analysis, and query optimization.",
+        "Built HIPAA-compliant backend services with Azure AD SAML 2.0 SSO, JWT, OAuth, and RBAC.",
+        "Designed and developed 30+ RESTful APIs supporting healthcare workflows, enterprise integrations, and mobile app functionality.",
+        "Directed architecture decisions, sprint planning, code reviews, release management, and production deployments."
+      ],
+      "technologies": ["Node.js", "TypeScript", "React.js", "PostgreSQL", "DynamoDB", "Docker", "AWS", "Azure", "NestJS", "REST APIs"]
+    },
+    {
+      "id": "exp_04",
+      "role": "Senior Software Engineer",
+      "company": "Precily, Inc.",
+      "type": "Full-time",
+      "location": "India",
+      "start_date": "2020",
+      "end_date": "2020",
+      "duration": "Less than a year",
+      "summary": "Worked on backend systems and APIs for Precily's AI-driven talent intelligence platform.",
+      "key_contributions": [
+        "Contributed to feature development, system performance, and backend reliability in a fast-paced, high-expectation environment."
+      ],
+      "technologies": ["Node.js", "TypeScript", "Git"]
+    },
+    {
+      "id": "exp_05",
+      "role": "Software Engineer",
+      "company": "Techlet Solutions Pvt. Ltd.",
+      "type": "Full-time",
+      "location": "Delhi, India",
+      "start_date": "2016-07",
+      "end_date": "2020-09",
+      "duration": "3 years 9 months",
+      "summary": "Designed and developed full-stack enterprise applications and 100+ RESTful APIs across 5–6 projects spanning multiple industries.",
+      "key_contributions": [
+        "Designed and developed RESTful APIs and backend services for scalable, data-driven applications.",
+        "Built Elasticsearch-powered search and analytics capabilities.",
+        "Integrated third-party APIs for authentication, notifications, reporting, and workflow automation.",
+        "Built data pipelines for extraction, cleansing, transformation, and indexing of large datasets."
+      ],
+      "technologies": ["Node.js", "PHP", "Python", "React.js", "MySQL", "MongoDB", "PostgreSQL", "Elasticsearch", "TypeScript", "AWS", "Sails.js"]
+    }
+  ],
+
+  "education": [
+    {
+      "institution": "Marist University",
+      "degree": "Master of Science",
+      "field": "Information Systems Management",
+      "start_date": "2023-08",
+      "end_date": "2025-05",
+      "gpa": "3.95",
+      "highlights": [
+        "Top 1% of cohort per faculty recommendation",
+        "Conducted ML research on BLE intrusion detection",
+        "Worked part-time for Marist IT Network Department throughout program",
+        "Actively pursued skills outside classroom: certifications, research projects, independent study"
+      ]
+    },
+    {
+      "institution": "Dr. A.P.J. Abdul Kalam Technical University (AKTU)",
+      "degree": "Bachelor of Technology",
+      "field": "Computer Science",
+      "start_date": "2012",
+      "end_date": "2016"
+    }
+  ],
+
+  "research": {
+    "title": "ML-Based Intrusion Detection System for BLE Cyber-Attacks",
+    "institution": "Marist University",
+    "year": "2025",
+    "description": "Built the full machine learning pipeline for a research team developing a BLE-based intrusion detection system.",
+    "methodology": "Iterated from logistic regression to a RandomForest model. Handled data cleansing, feature engineering, model training, evaluation, and IDS integration.",
+    "results": {
+      "accuracy": "95.11%",
+      "f1_score": "91.99%"
+    },
+    "technologies": ["Python", "Scikit-learn", "RandomForest", "Machine Learning"]
+  },
+
+  "certifications": [
+    {
+      "name": "Certificate of Completion: Claude 101",
+      "issuer": "Anthropic",
+      "issued": "2026-06",
+      "credential_id": "s3tsd5iroud5",
+      "skills": ["Anthropic Claude"]
+    },
+    {
+      "name": "AI Agents 101: Building AI Agents with MCP and Open-Source Inference",
+      "issuer": "AMD",
+      "skills": ["AI Agents", "Model Context Protocol (MCP)"]
+    },
+    {
+      "name": "5-Day AI Agents Intensive Course",
+      "issuer": "Google / Kaggle",
+      "issued": "2025-12",
+      "skills": ["AI Agents", "LLM Workflows"]
+    },
+    {
+      "name": "Python for Beginners",
+      "issuer": "Kaggle",
+      "issued": "2024"
+    }
+  ],
+
+  "github_projects": [
+    {
+      "name": "craeerpilot-ai",
+      "url": "https://github.com/SanjanaPeter71/craeerpilot-ai",
+      "description": "Job Application Management tool — a TypeScript-based AI-assisted app for managing job applications.",
+      "language": "TypeScript"
+    },
+    {
+      "name": "encrypted-autofill-extension",
+      "url": "https://github.com/SanjanaPeter71/encrypted-autofill-extension",
+      "description": "An open-source, local-only Chrome extension for secure form filling. No backend, no tracking — uses local encryption to streamline job searches.",
+      "language": null
+    },
+    {
+      "name": "github-actions-cicd-platform",
+      "url": "https://github.com/SanjanaPeter71/github-actions-cicd-platform",
+      "description": "Reusable GitHub Actions CI/CD template.",
+      "language": "JavaScript"
+    },
+    {
+      "name": "seed-to-social-growth-engineer",
+      "url": "https://github.com/SanjanaPeter71/seed-to-social-growth-engineer",
+      "description": "TypeScript project (details available on GitHub).",
+      "language": "TypeScript"
+    },
+    {
+      "name": "leetcode",
+      "url": "https://github.com/SanjanaPeter71/leetcode",
+      "description": "Solving LeetCode problems — active practice of algorithms and data structures.",
+      "language": null
+    },
+    {
+      "name": "SanjanaPeter71.github.io",
+      "url": "https://github.com/SanjanaPeter71/SanjanaPeter71.github.io",
+      "description": "Personal portfolio — Senior Full Stack Engineer focused on enterprise SaaS, backend architecture, recommendation systems, and AI-powered applications.",
+      "language": "HTML"
+    }
+  ],
+
+  "recommendations": [
+    {
+      "recommender": "Chris Algozzine, PMP®",
+      "recommender_title": "Faculty Member, Marist College",
+      "relationship": "Professor / Mentor",
+      "date": "2026-06-06",
+      "key_themes": ["top 1% of cohort", "desire to learn", "humility", "natural leadership", "applied skills outside classroom"],
+      "excerpt": "Sanjana was easily one of the top 1% of students in her cohort and potentially in the entire program for her 2 years. She came to see me more than professionals I have coached on leadership during my 26 years at IBM. Highly endorsed for any position."
+    },
+    {
+      "recommender": "Stuart Calcote",
+      "recommender_title": "Full Stack Developer (Lead Developer at Korn Ferry)",
+      "relationship": "Direct manager",
+      "date": "2026-06-03",
+      "key_themes": ["complex problem-solving", "independent execution", "deep product knowledge", "one of the finest engineers"],
+      "excerpt": "Sanjana is one of the finest engineers I have worked with and would be a tremendous asset on any software engineering team. I highly recommend her."
+    },
+    {
+      "recommender": "Abhay Goswami",
+      "recommender_title": "Senior Backend and Platform Engineer",
+      "relationship": "Colleague at Precily AI",
+      "date": "2021-12-20",
+      "key_themes": ["proactive", "energetic", "organized", "inspiring", "quick and sharp mind", "went above and beyond"],
+      "excerpt": "Sanjana leads by example and many people at Precily AI find her enthusiasm and dedication both inspiring and motivating."
+    },
+    {
+      "recommender": "Abhinav Kumar Gupta",
+      "recommender_title": "Senior Software Engineer at Morgan Stanley India",
+      "relationship": "Teammate at Precily",
+      "date": "2021-05-05",
+      "key_themes": ["complex problem-solving", "calm under pressure", "great asset to any team"],
+      "excerpt": "She always kept her cool in times of pressure which had always made a dramatic difference in the production level of our team."
+    },
+    {
+      "recommender": "Deepika Singh",
+      "recommender_title": "Product Manager",
+      "relationship": "Teacher",
+      "date": "2021-05-12",
+      "key_themes": ["extraordinary", "sincere", "hardworking", "logical and analytical skills", "quick learner"]
+    }
+  ],
+
+  "faqs": [
+    {
+      "q": "What is Sanjana's current employment status?",
+      "a": "Sanjana is currently employed as a Full Stack Software Engineer at iSpace, Inc. (client: Korn Ferry) since June 2025, and is also open to new senior engineering or technical lead opportunities."
+    },
+    {
+      "q": "What is Sanjana's total years of experience?",
+      "a": "Sanjana has 8+ years of professional software engineering experience, spanning roles from Software Engineer to Senior Engineer and Technical Lead."
+    },
+    {
+      "q": "What kind of roles is Sanjana looking for?",
+      "a": "Sanjana is open to Senior Software Engineer and Technical Lead roles — especially at companies where AI is a core part of the product. She is interested in enterprise SaaS, AI-powered products, and learning technology. She is open to remote, hybrid, and on-site work in the United States and other locations."
+    },
+    {
+      "q": "What is Sanjana's core tech stack?",
+      "a": "Node.js, TypeScript, NestJS, React.js, PostgreSQL, and AWS. She also has deep experience with Docker, REST APIs, TypeORM, and AI integrations."
+    },
+    {
+      "q": "Has Sanjana worked with AI or LLMs?",
+      "a": "Yes. Sanjana has integrated AI vendors (Yoodli for role-play, Thought Industries for learning), built a rules-based recommendation engine, completed the Google 5-Day AI Agents Intensive and AMD MCP certification, and conducted ML research achieving 95.11% accuracy on a BLE intrusion detection model. She is actively building with LLM workflows and agentic systems."
+    },
+    {
+      "q": "Has Sanjana led engineering teams?",
+      "a": "Yes. At Eliptico IT Solutions, she led a cross-functional team of 10–12 engineers across frontend, backend, QA, and product — managing architecture, sprint planning, code reviews, release management, and client communication."
+    },
+    {
+      "q": "What is Sanjana's educational background?",
+      "a": "Sanjana holds a Master of Science in Information Systems Management from Marist University (GPA 3.95, graduated May 2025) and a Bachelor of Technology in Computer Science from AKTU (2012–2016)."
+    },
+    {
+      "q": "What are Sanjana's GitHub projects?",
+      "a": "Her public repositories include craeerpilot-ai (AI job application manager), encrypted-autofill-extension (local Chrome extension for secure form filling), github-actions-cicd-platform (reusable CI/CD template), a LeetCode problem-solving repo, and her personal portfolio site at SanjanaPeter71.github.io."
+    },
+    {
+      "q": "What are people who have worked with Sanjana saying about her?",
+      "a": "Colleagues and managers consistently highlight her as one of the finest engineers they've worked with, praising her complex problem-solving ability, calm under pressure, proactive attitude, and natural leadership. Her lead developer at Korn Ferry called her 'one of the finest engineers I have worked with.' Her Marist professor ranked her top 1% of her cohort."
+    },
+    {
+      "q": "How can I contact Sanjana?",
+      "a": "You can reach Sanjana at sanjanapeter.career@gmail.com, connect on LinkedIn at linkedin.com/in/sanjana-peter, or view her work at github.com/SanjanaPeter71."
+    }
+  ]
+}
