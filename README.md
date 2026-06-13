@@ -272,3 +272,7 @@ In `app.py`, replace the `mailto-body` endpoint body with `smtplib` and `email.m
 **Index not updating after adding files** → Delete `.index_cache/` and restart.
 
 **Slow first response** → Normal — Ollama loads the model into RAM on first use. `llama3.2:1b` is faster if you're on limited RAM.
+
+## License
+
+MIT
