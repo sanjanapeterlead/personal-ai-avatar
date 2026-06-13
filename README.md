@@ -56,7 +56,7 @@ FastAPI /chat  →  { answer, answered: bool }
 ## Folder structure
 
 ```
-personal-rag-chatbot/
+personal-ai-avatar/
 ├── app.py              ← FastAPI backend
 ├── index.html          ← chat widget (self-contained)
 ├── requirements.txt
@@ -74,6 +74,8 @@ personal-rag-chatbot/
 ---
 
 ## Setup
+
+Copy `.env.example` to `.env` and fill in your settings before starting.
 
 ### 1. Install Ollama
 

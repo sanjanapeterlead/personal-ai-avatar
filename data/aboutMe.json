@@ -29,8 +29,8 @@
     "contact": {
       "email": "sanjanapeter.career@gmail.com",
       "linkedin": "https://linkedin.com/in/sanjana-peter",
-      "github": "https://github.com/SanjanaPeter71",
-      "portfolio": "https://SanjanaPeter71.github.io"
+      "github": "https://github.com/sanjanapeterlead",
+      "portfolio": "https://github.com/sanjanapeterlead"
     }
   },
 
@@ -226,40 +226,40 @@
 
   "github_projects": [
     {
-      "name": "craeerpilot-ai",
-      "url": "https://github.com/SanjanaPeter71/craeerpilot-ai",
-      "description": "Job Application Management tool — a TypeScript-based AI-assisted app for managing job applications.",
+      "name": "careerpilot-ai",
+      "url": "https://github.com/sanjanapeterlead/careerpilot-ai",
+      "description": "Job search operating system — tracking, fit scoring, resume lab, and application kits.",
       "language": "TypeScript"
     },
     {
-      "name": "encrypted-autofill-extension",
-      "url": "https://github.com/SanjanaPeter71/encrypted-autofill-extension",
-      "description": "An open-source, local-only Chrome extension for secure form filling. No backend, no tracking — uses local encryption to streamline job searches.",
+      "name": "secure-autofill",
+      "url": "https://github.com/sanjanapeterlead/secure-autofill",
+      "description": "Local-only Chrome extension for encrypted job-application autofill.",
       "language": null
     },
     {
       "name": "github-actions-cicd-platform",
-      "url": "https://github.com/SanjanaPeter71/github-actions-cicd-platform",
-      "description": "Reusable GitHub Actions CI/CD template.",
+      "url": "https://github.com/sanjanapeterlead/github-actions-cicd-platform",
+      "description": "Reusable GitHub Actions CI/CD template with sample Dockerized API.",
       "language": "JavaScript"
     },
     {
-      "name": "seed-to-social-growth-engineer",
-      "url": "https://github.com/SanjanaPeter71/seed-to-social-growth-engineer",
-      "description": "TypeScript project (details available on GitHub).",
+      "name": "seed-to-social",
+      "url": "https://github.com/sanjanapeterlead/seed-to-social",
+      "description": "Turn one content idea into multi-platform social posts with Ollama and Supabase analytics.",
       "language": "TypeScript"
     },
     {
-      "name": "leetcode",
-      "url": "https://github.com/SanjanaPeter71/leetcode",
-      "description": "Solving LeetCode problems — active practice of algorithms and data structures.",
-      "language": null
+      "name": "personal-ai-avatar",
+      "url": "https://github.com/sanjanapeterlead/personal-ai-avatar",
+      "description": "RAG-powered personal AI avatar for recruiter Q&A.",
+      "language": "Python"
     },
     {
-      "name": "SanjanaPeter71.github.io",
-      "url": "https://github.com/SanjanaPeter71/SanjanaPeter71.github.io",
-      "description": "Personal portfolio — Senior Full Stack Engineer focused on enterprise SaaS, backend architecture, recommendation systems, and AI-powered applications.",
-      "language": "HTML"
+      "name": "leetcode-solutions",
+      "url": "https://github.com/sanjanapeterlead/leetcode-solutions",
+      "description": "LeetCode and DSA solution archive.",
+      "language": null
     }
   ],
 
@@ -336,7 +336,7 @@
     },
     {
       "q": "What are Sanjana's GitHub projects?",
-      "a": "Her public repositories include craeerpilot-ai (AI job application manager), encrypted-autofill-extension (local Chrome extension for secure form filling), github-actions-cicd-platform (reusable CI/CD template), a LeetCode problem-solving repo, and her personal portfolio site at SanjanaPeter71.github.io."
+      "a": "Her public repositories include careerpilot-ai (job search OS), secure-autofill (encrypted Chrome autofill), github-actions-cicd-platform (CI/CD template), seed-to-social (content repurposing), personal-ai-avatar (RAG recruiter chatbot), and leetcode-solutions."
     },
     {
       "q": "What are people who have worked with Sanjana saying about her?",
@@ -344,7 +344,7 @@
     },
     {
       "q": "How can I contact Sanjana?",
-      "a": "You can reach Sanjana at sanjanapeter.career@gmail.com, connect on LinkedIn at linkedin.com/in/sanjana-peter, or view her work at github.com/SanjanaPeter71."
+      "a": "You can reach Sanjana at sanjanapeter.career@gmail.com, connect on LinkedIn at linkedin.com/in/sanjana-peter, or view her work at github.com/sanjanapeterlead."
     }
   ]
 }
