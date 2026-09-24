@@ -24,6 +24,9 @@ logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s [%(levelname)s] %(name)s — %(message)s",
 )
+# httpx logs every request URL at INFO — keep it to warnings so URLs never
+# end up in the logs, even if a secret is ever put in one again.
+logging.getLogger("httpx").setLevel(logging.WARNING)
 logger = logging.getLogger(__name__)
 
 

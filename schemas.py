@@ -7,6 +7,7 @@ from pydantic import BaseModel
 
 class ChatRequest(BaseModel):
     question: str
+    session_id: str = ""    # client-generated, groups a recruiter's questions in Slack
 
 
 class ChatResponse(BaseModel):

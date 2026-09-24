@@ -2,6 +2,44 @@
 
 ---
 
+## Issue 8: Gemini API Key Leaked into Logs via the Request URL
+
+**Symptom:** Every `/chat` call using Gemini printed a log line like:
+```
+INFO httpx — HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent?key=AIza... "HTTP/1.1 200 OK"
+```
+The full API key was visible in the terminal, and would have been stored in the
+hosting provider's log dashboard after deployment.
+
+**Cause:** Two things combined:
+1. `llm.py` passed the key as a URL query parameter (`?key=...`).
+2. `app.py` calls `logging.basicConfig(level=logging.INFO)`, which turns on
+   INFO logs for *every* library. httpx logs each request's full URL at INFO
+   (`httpx/_client.py`, `'HTTP Request: %s %s ...'`).
+
+Nothing in our own code printed the key. A third-party library did, because
+the secret was in a place libraries treat as safe to log.
+
+**Fix:**
+1. `llm.py`: send the key in the `x-goog-api-key` header, and post to the bare
+   `GEMINI_API_URL` with no query string.
+2. `app.py`: `logging.getLogger("httpx").setLevel(logging.WARNING)` as defense
+   in depth. httpx errors still show, but routine request URLs are no longer logged.
+
+**Verified:** Ran a real Gemini call with INFO logging captured. The answer came
+back normally, the key did not appear in the logs, and no `HTTP Request` lines
+were emitted.
+
+**Why / lesson:** Secrets belong in headers, not URLs. Proxies, load
+balancers, server access logs, browser history and HTTP clients all log URLs by
+default, and usually don't log headers. The log-level change alone would not be
+a fix. It hides this one logger, but the key would still be in the URL for any
+other layer that logs it. **Follow-up:** the key was printed to local
+terminals before this fix. It was never deployed, so the risk is low, but
+rotating it in Google AI Studio is cheap and removes the doubt.
+
+---
+
 ## Issue 6: LLM_PROVIDER Crashes if Not Set in .env (AttributeError)
 
 **Error:**

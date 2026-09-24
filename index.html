@@ -389,6 +389,7 @@
   let isLoading        = false;
   let unansweredList   = [];   // questions the avatar couldn't answer this session
   let ownerConfig      = {};   // populated from /config on load
+  const sessionId = (crypto.randomUUID ? crypto.randomUUID() : `${Date.now()}-${Math.random()}`);
 
   // ── Helpers ───────────────────────────────────────────────────────────────
   const $ = id => document.getElementById(id);
@@ -446,7 +447,7 @@
       <div class="escalation-card">
         <p>
           <strong>I couldn't find that in my documents.</strong><br>
-          You can reach ${name} directly for this one.
+          ${name} has been notified and may jump in — or you can reach her directly.
         </p>
         <div class="esc-actions">
           <button class="esc-btn primary" onclick="openEmailModal()">
@@ -521,7 +522,7 @@
       const res = await fetch(`${API_BASE}/chat`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ question }),
+        body: JSON.stringify({ question, session_id: sessionId }),
       });
       removeTyping();
 

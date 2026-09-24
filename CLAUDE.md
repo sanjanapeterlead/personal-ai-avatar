@@ -37,6 +37,15 @@ It answers questions from her documents and escalates unanswerable questions via
    side email sending without explicit instruction — it requires SMTP credentials
    and changes the security model.
 
+5a. **Slack is a notify-only escalation channel, alongside Email/WhatsApp — not
+   a replacement.** `slack.py` posts to a Slack Incoming Webhook (`SLACK_WEBHOOK_URL`,
+   read via `config.py` per rule #1) as a `BackgroundTasks` job from `routers/chat.py`
+   whenever `answered=False`. It must never raise — a Slack failure must never break
+   the `/chat` response. This is one-way (avatar → Slack); it does not relay Slack
+   replies back into the widget. A live two-way relay would need a Slack bot token,
+   Events API, and a public HTTPS callback URL — out of scope until the app is
+   actually deployed (see README "What to build next").
+
 6. **`answered: bool` in ChatResponse is load-bearing.** The frontend uses it
    to decide whether to show the escalation card. Do not remove or rename it.
 
@@ -54,6 +63,7 @@ It answers questions from her documents and escalates unanswerable questions via
 | `indexer.py` | Document loading and vector index construction |
 | `prompts.py` | `SYSTEM_PROMPT` and `build_prompt()` |
 | `llm.py` | `call_ollama`, `call_gemini`, `call_llm` |
+| `slack.py` | `notify_slack_unanswered` — posts to Slack Incoming Webhook, optional, never raises |
 | `routers/health.py` | `GET /health` |
 | `routers/chat.py` | `POST /chat` |
 | `routers/misc.py` | `GET /config`, `POST /mailto-body`, `GET /` |

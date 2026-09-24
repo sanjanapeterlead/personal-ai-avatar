@@ -3,25 +3,28 @@ routers/chat.py — POST /chat
 
 Retrieves relevant document chunks, builds a prompt, calls the LLM,
 and returns an answer with an `answered` flag the frontend uses to
-decide whether to show the escalation card.
+decide whether to show the escalation card. Unanswered questions are
+also pushed to Slack (if configured) as a background task so the
+response to the recruiter is never delayed by the notification.
 """
 
 import asyncio
 import logging
 
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, BackgroundTasks, HTTPException, Request
 
 from config import LLM_PROVIDER, UNANSWERED_SIGNAL
 from llm import call_llm
 from prompts import build_prompt
 from schemas import ChatRequest, ChatResponse
+from slack import notify_slack_unanswered
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
 
 
 @router.post("/chat", response_model=ChatResponse)
-async def chat(request: Request, body: ChatRequest):
+async def chat(request: Request, body: ChatRequest, background_tasks: BackgroundTasks):
     question = body.question.strip()
     if not question:
         raise HTTPException(status_code=400, detail="Question must not be empty.")
@@ -38,6 +41,7 @@ async def chat(request: Request, body: ChatRequest):
 
     if not nodes:
         logger.info("Q: %s | no chunks retrieved — escalating", question[:80])
+        background_tasks.add_task(notify_slack_unanswered, question, body.session_id)
         return ChatResponse(
             answer=f"{UNANSWERED_SIGNAL} in my documents about that.",
             answered=False,
@@ -52,6 +56,8 @@ async def chat(request: Request, body: ChatRequest):
 
     answered = not answer.startswith(UNANSWERED_SIGNAL)
     logger.info("Q: %s | answered: %s | provider: %s", question[:80], answered, LLM_PROVIDER)
+    if not answered:
+        background_tasks.add_task(notify_slack_unanswered, question, body.session_id)
     return ChatResponse(
         answer=answer,
         answered=answered,

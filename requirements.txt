@@ -16,8 +16,11 @@ llama-index-embeddings-huggingface
 sentence-transformers
 torch
 
-# PDF reading
+# PDF reading — llama-index-readers-file provides the PDFReader that
+# SimpleDirectoryReader uses for .pdf files; without it, PDFs get read as raw
+# bytes instead of extracted text (see project-issues-faced-and-solved.md, Issue 3).
 pypdf
+llama-index-readers-file
 
 # Misc
 python-dotenv

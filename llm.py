@@ -76,11 +76,13 @@ async def call_gemini(prompt: str) -> str:
         "contents": [{"parts": [{"text": prompt}]}],
         "generationConfig": {"temperature": 0.25, "maxOutputTokens": 600},
     }
-    url = f"{GEMINI_API_URL}?key={GEMINI_API_KEY}"
+    # Key goes in a header, not the URL — httpx logs request URLs at INFO level,
+    # so a ?key= query param would print the secret to the logs on every call.
+    headers = {"x-goog-api-key": GEMINI_API_KEY}
 
     async with httpx.AsyncClient(timeout=60.0) as client:
         try:
-            r = await client.post(url, json=payload)
+            r = await client.post(GEMINI_API_URL, json=payload, headers=headers)
             r.raise_for_status()
         except httpx.HTTPStatusError as exc:
             if exc.response.status_code == 429:

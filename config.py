@@ -22,10 +22,12 @@ OLLAMA_BASE_URL = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434")
 OLLAMA_MODEL    = os.environ.get("OLLAMA_MODEL", "llama3.2")
 
 # ── Gemini free tier ──────────────────────────────────────────────────────────
-# gemini-1.5-flash: 15 RPM, 1 M tokens/day, no credit card required
 # Get key: https://aistudio.google.com/app/apikey
+# Using the "-latest" alias (rather than a dated model name) so this doesn't
+# silently break when Google deprecates a specific version — see
+# project-issues-faced-and-solved.md for the incident that prompted this.
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-GEMINI_MODEL   = os.environ.get("GEMINI_MODEL", "gemini-2.0-flash-lite")
+GEMINI_MODEL   = os.environ.get("GEMINI_MODEL", "gemini-flash-lite-latest")
 GEMINI_API_URL = (
     "https://generativelanguage.googleapis.com/v1beta/models"
     f"/{GEMINI_MODEL}:generateContent"
@@ -35,6 +37,13 @@ GEMINI_API_URL = (
 OWNER_NAME     = os.environ.get("AVATAR_OWNER_NAME", "Sanjana")
 OWNER_EMAIL    = os.environ.get("AVATAR_OWNER_EMAIL", "your@email.com")
 OWNER_WHATSAPP = os.environ.get("AVATAR_OWNER_WHATSAPP", "")  # leave blank to hide button
+
+# ── Slack escalation (optional — set in .env, never hard-code) ────────────────
+# Incoming Webhook URL from a Slack app (https://api.slack.com/messaging/webhooks).
+# When set, every unanswered question is posted to that Slack channel in real
+# time so the owner can follow up. Leave blank to disable — the app runs fine
+# without it, the recruiter still has the Email/WhatsApp escalation card.
+SLACK_WEBHOOK_URL = os.environ.get("SLACK_WEBHOOK_URL", "")
 
 # ── Storage paths ─────────────────────────────────────────────────────────────
 DATA_DIR    = Path("data")
